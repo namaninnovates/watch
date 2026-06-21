@@ -468,8 +468,9 @@ function loadProduct() {
             const div = document.createElement('div');
             div.className = 'product-review-item';
             
-            // Generate avatar based on initials (monochrome black background, white text)
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(r.author)}&background=000000&color=ffffff`;
+            // Generate avatar from initials inline (no external requests)
+            const initials = r.author.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            const avatarSvg = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="%23000"/><text x="50%25" y="50%25" dominant-baseline="central" text-anchor="middle" fill="%23fff" font-family="Montserrat,Arial,sans-serif" font-size="15" font-weight="600">${initials}</text></svg>`)}`;
             
             // Convert rating to stars
             let starsStr = '★★★★★';
@@ -481,7 +482,7 @@ function loadProduct() {
 
             div.innerHTML = `
                 <div class="review-author-row">
-                    <img src="${avatarUrl}" alt="${r.author}">
+                    <img src="${avatarSvg}" alt="${r.author}" width="40" height="40">
                     <span class="review-author-name">${r.author}</span>
                 </div>
                 <div class="review-rating-row">

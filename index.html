@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRONOS | Minimalist Smartwatches</title>
+    <meta name="description" content="Discover CHRONOS, a collection of premium, minimalistic smartwatches featuring luxury aesthetics and cutting-edge technology.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header product-header">
+        <div class="header-left">
+            <a href="index.html" class="logo">CHRONOS.</a>
+        </div>
+        <nav class="nav">
+            <a href="#collection">Collection</a>
+            <a href="#about">About</a>
+            <button class="cart-btn" id="cartBtn">Cart (0)</button>
+        </nav>
+    </header>
+
+    <div class="announcement-bar">
+        <div class="announcement-track">
+            <span>MID-SEASON SALE: ENJOY UP TO 30% OFF — COMPLIMENTARY EXPRESS SHIPPING — 2-YEAR WARRANTY ON ALL TIMEPIECES — </span>
+            <span>MID-SEASON SALE: ENJOY UP TO 30% OFF — COMPLIMENTARY EXPRESS SHIPPING — 2-YEAR WARRANTY ON ALL TIMEPIECES — </span>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero-carousel">
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel-slide active" style="background-image: url('assets/hero_1.png');">
+                    <div class="hero-content">
+                        <h1>Time Refined</h1>
+                        <p>Precision born from restraint. Worn by those who demand more.</p>
+                        <a href="#collection" class="btn btn-outline" style="background-color: var(--color-white); color: var(--color-black);">Explore Collection</a>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background-image: url('assets/hero_2.png');">
+                    <div class="hero-content">
+                        <h1>Pure Elegance</h1>
+                        <p>Where silence meets precision. Designed for the discerning few.</p>
+                        <a href="#collection" class="btn btn-outline" style="background-color: var(--color-white); color: var(--color-black);">View Range</a>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background-image: url('assets/hero_3.png');">
+                    <div class="hero-content">
+                        <h1>Built to Perform</h1>
+                        <p>Every second tracked. Every detail uncompromised.</p>
+                        <a href="#collection" class="btn btn-outline" style="background-color: var(--color-white); color: var(--color-black);">Discover More</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)">&#10094;</button>
+            <button class="carousel-btn next-btn" onclick="moveCarousel(1)">&#10095;</button>
+        </section>
+
+        <section id="collection" class="collection">
+            <h2 class="section-title">The Collection</h2>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card" data-id="1">
+                    <div class="product-image-wrapper">
+                        <img src="assets/nova_core.png" alt="Nova Core Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Nova Core</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹2,799</span>
+                            <span class="sale-price">₹2,099</span>
+                            <span class="discount-label">25% OFF</span>
+                        </p>
+                        <a href="product.html?id=nova-core" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card" data-id="2">
+                    <div class="product-image-wrapper">
+                        <img src="assets/nova_pulse.png" alt="Nova Pulse Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Nova Pulse</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹2,899</span>
+                            <span class="sale-price">₹2,149</span>
+                            <span class="discount-label">25% OFF</span>
+                        </p>
+                        <a href="product.html?id=nova-pulse" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card" data-id="3">
+                    <div class="product-image-wrapper">
+                        <img src="assets/aura_lite.png" alt="Aura Lite Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Aura Lite</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹2,999</span>
+                            <span class="sale-price">₹2,199</span>
+                            <span class="discount-label">26% OFF</span>
+                        </p>
+                        <a href="product.html?id=aura-lite" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card" data-id="4">
+                    <div class="product-image-wrapper">
+                        <img src="assets/aura_active.png" alt="Aura Active Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Aura Active</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹3,099</span>
+                            <span class="sale-price">₹2,249</span>
+                            <span class="discount-label">27% OFF</span>
+                        </p>
+                        <a href="product.html?id=aura-active" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 5 -->
+                <div class="product-card" data-id="5">
+                    <div class="product-image-wrapper">
+                        <img src="assets/zenith_pro.png" alt="Zenith Pro Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Zenith Pro</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹3,199</span>
+                            <span class="sale-price">₹2,349</span>
+                            <span class="discount-label">26% OFF</span>
+                        </p>
+                        <a href="product.html?id=zenith-pro" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 6 -->
+                <div class="product-card" data-id="6">
+                    <div class="product-image-wrapper">
+                        <img src="assets/zenith_elite.png" alt="Zenith Elite Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Zenith Elite</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹3,299</span>
+                            <span class="sale-price">₹2,399</span>
+                            <span class="discount-label">27% OFF</span>
+                        </p>
+                        <a href="product.html?id=zenith-elite" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 7 -->
+                <div class="product-card" data-id="7">
+                    <div class="product-image-wrapper">
+                        <img src="assets/obsidian.png" alt="Obsidian Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Obsidian</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹3,399</span>
+                            <span class="sale-price">₹2,449</span>
+                            <span class="discount-label">27% OFF</span>
+                        </p>
+                        <a href="product.html?id=obsidian" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+                <!-- Product 8 -->
+                <div class="product-card" data-id="8">
+                    <div class="product-image-wrapper">
+                        <img src="assets/obsidian_ultra.png" alt="Obsidian Ultra Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3>Obsidian Ultra</h3>
+                        <p class="price-container">
+                            <span class="original-price">₹3,499</span>
+                            <span class="sale-price">₹2,499</span>
+                            <span class="discount-label">28% OFF</span>
+                        </p>
+                        <a href="product.html?id=obsidian-ultra" class="btn btn-view" style="display:inline-block;">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Editorial Quote Section -->
+        <section class="editorial-quote">
+            <div class="editorial-quote-inner">
+                <span class="quote-mark">&ldquo;</span>
+                <blockquote>A watch is not merely a device<br>that tells time &mdash; it is time<br>made visible.</blockquote>
+                <p class="quote-author">— The CHRONOS Philosophy</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-advanced">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">CHRONOS.</div>
+                <p>A masterclass in minimalism. Explore our exclusive collection of premium smartwatches.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <a href="index.html#collection">All Watches</a>
+                <a href="#">Accessories</a>
+                <a href="#">Gift Cards</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Shipping</a>
+                <a href="#">Returns</a>
+            </div>
+            <div class="footer-newsletter">
+                <h4>Join the Club</h4>
+                <p>Subscribe for exclusive releases.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Email Address" required>
+                    <button type="submit">→</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Chronos Watches. All rights reserved.</p>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

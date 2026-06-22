@@ -286,7 +286,14 @@ function updateCartUI() {
     const cart = getCart();
     const count = cart.reduce((sum, item) => sum + item.qty, 0);
     const cartText = document.getElementById('cartCountText');
-    if(cartText) cartText.textContent = `Cart (${count})`;
+    if(cartText) {
+        cartText.textContent = count;
+        if (count > 0) {
+            cartText.style.display = 'flex';
+        } else {
+            cartText.style.display = 'none';
+        }
+    }
 }
 
 // --- Carousel Logic ---

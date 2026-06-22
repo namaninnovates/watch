@@ -272,7 +272,22 @@ const products = {
     }
 };
 
-let cartCount = 0;
+// --- Cart State Management ---
+function getCart() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+}
+
+function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const cartText = document.getElementById('cartCountText');
+    if(cartText) cartText.textContent = `Cart (${count})`;
+}
 
 // --- Carousel Logic ---
 let slideIndex = 0;
@@ -325,12 +340,21 @@ function changeQty(step) {
 }
 
 function addToCart() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    if (!productId || !products[productId]) return;
+
     const qtyInput = document.getElementById('qtyInput');
     const qty = qtyInput ? parseInt(qtyInput.value) : 1;
-    cartCount += qty;
     
-    const cartBtn = document.getElementById('cartBtn');
-    if(cartBtn) cartBtn.textContent = `Cart (${cartCount})`;
+    const cart = getCart();
+    const existing = cart.find(item => item.id === productId);
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        cart.push({ id: productId, qty: qty });
+    }
+    saveCart(cart);
     
     // Provide feedback on the button that was clicked
     const btn = document.activeElement;
@@ -360,6 +384,102 @@ function addToCart() {
             }
         }, 1000);
     }
+}
+
+// --- Checkout Logic ---
+function removeFromCart(id) {
+    let cart = getCart();
+    cart = cart.filter(item => item.id !== id);
+    saveCart(cart);
+    loadCheckout();
+}
+
+function changeCartQty(id, step) {
+    let cart = getCart();
+    const item = cart.find(item => item.id === id);
+    if (item) {
+        item.qty += step;
+        if (item.qty < 1) item.qty = 1;
+        saveCart(cart);
+        loadCheckout();
+    }
+}
+
+function loadCheckout() {
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const orderSubtotal = document.getElementById('orderSubtotal');
+    const orderTotal = document.getElementById('orderTotal');
+    
+    if (!cartItemsContainer) return; // Not on checkout page
+    
+    const cart = getCart();
+    cartItemsContainer.innerHTML = '';
+    
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart-msg">
+                <h2>Your cart is empty</h2>
+                <a href="index.html#collection" class="btn btn-solid" style="max-width: 200px; display: inline-block;">Shop Now</a>
+            </div>
+        `;
+        if(orderSubtotal) orderSubtotal.textContent = '₹0';
+        if(orderTotal) orderTotal.textContent = '₹0';
+        return;
+    }
+    
+    let subtotal = 0;
+    
+    cart.forEach(item => {
+        const product = products[item.id];
+        if (!product) return;
+        
+        const priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
+        subtotal += priceNum * item.qty;
+        
+        const cartItemHTML = `
+            <div class="cart-item">
+                <img src="${product.image}" alt="${product.title}">
+                <div class="cart-item-details">
+                    <div>
+                        <h4 class="cart-item-title">${product.title}</h4>
+                        <p class="cart-item-price">${product.price}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="qty-selector" style="width: auto;">
+                            <button class="qty-btn" onclick="changeCartQty('${item.id}', -1)">-</button>
+                            <input type="text" value="${item.qty}" readonly style="width: 40px; text-align: center; border: none;">
+                            <button class="qty-btn" onclick="changeCartQty('${item.id}', 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart('${item.id}')">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        cartItemsContainer.innerHTML += cartItemHTML;
+    });
+    
+    // Format to INR
+    const formatter = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+    });
+    
+    const formattedSubtotal = formatter.format(subtotal).replace('INR', '₹').trim();
+    if(orderSubtotal) orderSubtotal.textContent = formattedSubtotal;
+    if(orderTotal) orderTotal.textContent = formattedSubtotal; // Assuming free shipping
+}
+
+function processCheckout(event) {
+    event.preventDefault();
+    const cart = getCart();
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+    alert("Thank you for your order! Your luxury timepiece will be shipped soon.");
+    localStorage.removeItem('cart');
+    window.location.href = 'index.html';
 }
 
 // --- Accordion Logic ---
@@ -544,8 +664,10 @@ function loadRecommended(currentId) {
 
 // Initialize based on what exists on the page
 document.addEventListener('DOMContentLoaded', () => {
+    updateCartUI();
     initCarousel();
     loadProduct();
+    loadCheckout();
 
     // Make product cards on landing page clickable
     document.querySelectorAll('.product-card').forEach(card => {

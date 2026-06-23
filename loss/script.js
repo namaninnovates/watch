@@ -274,11 +274,11 @@ const products = {
 
 // --- Cart State Management ---
 function getCart() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+    return JSON.parse(localStorage.getItem('loss_cart')) || [];
 }
 
 function saveCart(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('loss_cart', JSON.stringify(cart));
     updateCartUI();
 }
 
@@ -426,7 +426,7 @@ function loadCheckout() {
     
     if (!cartItemsContainer) return; // Not on checkout page
     
-    const isLossFrame = false;
+    const isLossFrame = true;
     
     const cart = getCart();
     cartItemsContainer.innerHTML = '';
@@ -532,7 +532,7 @@ function processCheckout(event) {
         return;
     }
     alert("Thank you for your order! Your luxury timepiece will be shipped soon.");
-    localStorage.removeItem('cart');
+    localStorage.removeItem('loss_cart');
     window.location.href = 'index.html';
 }
 

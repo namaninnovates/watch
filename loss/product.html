@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product | CHRONOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header product-header">
+        <div class="header-left">
+            <a href="index.html" class="logo">CHRONOS.</a>
+        </div>
+        <nav class="nav">
+            <a href="index.html#collection">Collection</a>
+            <a href="index.html#about">About</a>
+            <a href="checkout.html" class="cart-btn" id="cartBtn">
+                <div class="cart-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cartCountText">0</span>
+                </div>
+            </a>
+        </nav>
+    </header>
+
+    <div class="announcement-bar">
+        <div class="announcement-track">
+            <span>MID-SEASON SALE: ENJOY UP TO 30% OFF — COMPLIMENTARY EXPRESS SHIPPING — 2-YEAR WARRANTY ON ALL TIMEPIECES — </span>
+            <span>MID-SEASON SALE: ENJOY UP TO 30% OFF — COMPLIMENTARY EXPRESS SHIPPING — 2-YEAR WARRANTY ON ALL TIMEPIECES — </span>
+        </div>
+    </div>
+
+    <main class="product-main">
+        <section class="product-top-section">
+            <!-- Column 1: Vertically Scrolled Images -->
+            <div class="product-image-col">
+                <div class="vertical-scroll-gallery" id="verticalGallery">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Column 2: Info -->
+            <div class="product-info-col">
+                <a href="index.html#collection" class="store-link">CHRONOS STORE</a>
+                <h1 id="productTitle">Loading...</h1>
+                
+                <div class="product-ratings">
+                    <span class="stars">★★★★★</span> 
+                    <a href="#reviews" class="rating-link">4,120 ratings</a>
+                </div>
+                
+                <div class="separator-line-light"></div>
+                
+                <div class="product-price-block">
+                    <span class="original-price" id="originalPrice">₹0</span>
+                    <span id="productPrice" class="price">₹0</span>
+                    <span class="discount-badge" id="discountBadge">SAVE 0%</span>
+                </div>
+                <p class="shipping-returns-notice">FREE SHIPPING & RETURNS</p>
+                
+                <div class="product-bullets">
+                    <ul id="featuresList">
+                        <!-- Loaded via JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Column 3: Buy Area -->
+            <div class="product-buy-col">
+                <h2 id="buyBoxPrice" class="buybox-price">₹0</h2>
+                <div class="buybox-original-row">
+                    <span class="original-price-small" id="buyBoxOriginalPrice">₹0</span>
+                    <span class="discount-label-small" id="buyBoxDiscountBadge">0% OFF</span>
+                </div>
+                <p class="delivery-info">FREE standard shipping on all domestic orders. In stock and ready to ship.</p>
+                
+                <div class="qty-selector">
+                    <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                    <input type="text" id="qtyInput" value="1" readonly>
+                    <button class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+                
+                <button class="btn btn-solid btn-add-cart" onclick="addToCart()">Add to Cart</button>
+                <button class="btn btn-outline btn-buy-now" onclick="addToCart()">Buy Now</button>
+                
+                <div class="product-nudges">
+                    <p class="nudge-item flash-sale-nudge">🔥 Selling fast — only 3 left in stock</p>
+                    <p class="nudge-item cart-nudge">⚡ 5 people have this in their cart</p>
+                    <p class="nudge-item shipping-nudge">✈ Free insured express shipping</p>
+                </div>
+
+                <div class="purchase-benefits">
+                    <p>✓ 2-Year Limited Warranty</p>
+                    <p>✓ 14-Day Return Policy</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="separator-line"></div>
+
+        <section class="product-description-section">
+            <h2>Product Description</h2>
+            <p id="productDescription" class="product-description"></p>
+        </section>
+
+        <div class="separator-line"></div>
+
+        <section class="product-manufacturer-section">
+            <h2>Explore Every Detail</h2>
+            <div class="manufacturer-grid">
+                <div class="mfg-card">
+                    <img src="assets/detail_strap.png" alt="Feature Detail" id="mfgImg1">
+                    <h3>The Design Journey</h3>
+                    <p>Experience the depth and complexity of our finest materials. A masterclass in modern horology, blending rare metals with contemporary aesthetics for unmatched elegance.</p>
+                </div>
+                <div class="mfg-card">
+                    <img src="assets/detail_charger.png" alt="Lifestyle" id="mfgImg2">
+                    <h3>Technical Profile</h3>
+                    <ul id="specsList">
+                        <!-- Loaded via JS -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="separator-line"></div>
+
+        <section class="product-reviews-section" id="reviews">
+            <h2>Customer Reviews</h2>
+            <div class="reviews-split">
+                <div class="reviews-left">
+                    <div class="global-rating">
+                        <span class="big-rating">4.8</span> out of 5
+                    </div>
+                    <div class="stars-large">★★★★★</div>
+                    <p class="total-ratings">4,120 global ratings</p>
+                    
+                    <div class="histogram">
+                        <div class="hist-row"><span>5 star</span><div class="bar-container"><div class="bar" style="width: 89%;"></div></div><span>89%</span></div>
+                        <div class="hist-row"><span>4 star</span><div class="bar-container"><div class="bar" style="width: 10%;"></div></div><span>10%</span></div>
+                        <div class="hist-row"><span>3 star</span><div class="bar-container"><div class="bar" style="width: 3%;"></div></div><span>3%</span></div>
+                        <div class="hist-row"><span>2 star</span><div class="bar-container"><div class="bar" style="width: 0%;"></div></div><span>0%</span></div>
+                        <div class="hist-row"><span>1 star</span><div class="bar-container"><div class="bar" style="width: 0%;"></div></div><span>0%</span></div>
+                    </div>
+                </div>
+                <div class="reviews-right">
+                    <h3>Top reviews</h3>
+                    <div class="product-reviews-list" id="reviewsContent">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-advanced">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">CHRONOS.</div>
+                <p>A masterclass in minimalism. Explore our exclusive collection of premium smartwatches.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <a href="index.html#collection">All Watches</a>
+                <a href="#">Accessories</a>
+                <a href="#">Gift Cards</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Shipping</a>
+                <a href="#">Returns</a>
+            </div>
+            <div class="footer-newsletter">
+                <h4>Join the Club</h4>
+                <p>Subscribe for exclusive releases.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Email Address" required>
+                    <button type="submit">→</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Chronos Watches. All rights reserved.</p>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

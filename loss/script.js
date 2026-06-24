@@ -454,6 +454,7 @@ function loadCheckout() {
         const priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
         const originalPriceNum = parseInt(product.originalPrice.replace(/[^0-9]/g, ''));
         const itemSavings = (originalPriceNum - priceNum) * item.qty;
+        const savePct = Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100);
         
         subtotal += priceNum * item.qty;
         totalSavings += itemSavings;
@@ -464,9 +465,9 @@ function loadCheckout() {
         let savingsHtml = '';
         if (itemSavings > 0) {
             if (isLossFrame) {
-                savingsHtml = `<div class="item-loss-label">Don't lose ${formattedItemSavings}</div>`;
+                savingsHtml = `<div class="item-loss-label">${savePct}% OFF | <span style="color: #c5221f;">DON'T LOSE ${formattedItemSavings}</span></div>`;
             } else {
-                savingsHtml = `<div class="item-savings-label">Save ${formattedItemSavings}</div>`;
+                savingsHtml = `<div class="item-savings-label">${savePct}% OFF | <span style="color: #137333;">SAVE ${formattedItemSavings}</span></div>`;
             }
         }
         
@@ -511,10 +512,10 @@ function loadCheckout() {
         if(totalSavings > 0) {
             const formattedTotalSavings = formatter.format(totalSavings).replace('INR', '₹').trim();
             if (isLossFrame) {
-                orderSavingsBanner.textContent = `Don't lose your ${formattedTotalSavings} savings!`;
+                orderSavingsBanner.textContent = `Buy now to avoid a loss of ${formattedTotalSavings}`;
                 orderSavingsBanner.className = 'loss-banner';
             } else {
-                orderSavingsBanner.textContent = `Enjoy ${formattedTotalSavings} saving on this order!`;
+                orderSavingsBanner.textContent = `Savings of ${formattedTotalSavings} applied to your order.`;
                 orderSavingsBanner.className = 'savings-banner';
             }
             orderSavingsBanner.style.display = 'block';

@@ -391,21 +391,38 @@ function addToCart() {
             }
         }, 1000);
     }
+    if (typeof openSidecart === 'function') {
+        openSidecart();
+    }
 }
 
 // --- Checkout Logic ---
+function processCheckout(event) {
+    if (event) event.preventDefault();
+    const cart = getCart();
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+    alert("Thank you for your order! Your luxury timepiece will be shipped soon.");
+    localStorage.removeItem('loss_cart');
+    updateCartUI();
+    if (typeof renderSidecart === 'function') renderSidecart();
+    if (typeof closeSidecart === 'function') closeSidecart();
+}
+
 function removeFromCart(id) {
     let cart = getCart();
     cart = cart.filter(item => item.id !== id);
     saveCart(cart);
-    loadCheckout();
+    updateCartUI();
+    if (typeof renderSidecart === 'function') renderSidecart();
 }
 
 function saveCartForLater() {
     alert("Cart saved for later!");
     localStorage.removeItem('loss_cart');
     updateCartUI();
-    loadCheckout();
 }
 
 function changeCartQty(id, step) {
@@ -415,127 +432,12 @@ function changeCartQty(id, step) {
         item.qty += step;
         if (item.qty < 1) item.qty = 1;
         saveCart(cart);
-        loadCheckout();
+        updateCartUI();
+        if (typeof renderSidecart === 'function') renderSidecart();
     }
 }
 
-function loadCheckout() {
-    const cartItemsContainer = document.getElementById('cartItemsContainer');
-    const orderSubtotal = document.getElementById('orderSubtotal');
-    const orderTotal = document.getElementById('orderTotal');
-    const orderSavingsBanner = document.getElementById('orderSavingsBanner');
-    
-    if (!cartItemsContainer) return; // Not on checkout page
-    
-    const isLossFrame = true;
-    
-    const cart = getCart();
-    cartItemsContainer.innerHTML = '';
-    
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = `
-            <div class="empty-cart-msg">
-                <h2>Your cart is empty</h2>
-                <a href="index.html#collection" class="btn btn-solid" style="max-width: 200px; display: inline-block;">Shop Now</a>
-            </div>
-        `;
-        if(orderSubtotal) orderSubtotal.textContent = '₹0';
-        if(orderTotal) orderTotal.textContent = '₹0';
-        if(orderSavingsBanner) orderSavingsBanner.style.display = 'none';
-        return;
-    }
-    
-    let subtotal = 0;
-    let totalSavings = 0;
-    
-    cart.forEach(item => {
-        const product = products[item.id];
-        if (!product) return;
-        
-        const priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
-        const originalPriceNum = parseInt(product.originalPrice.replace(/[^0-9]/g, ''));
-        const itemSavings = (originalPriceNum - priceNum) * item.qty;
-        const savePct = Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100);
-        
-        subtotal += priceNum * item.qty;
-        totalSavings += itemSavings;
-        
-        const formatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
-        const formattedItemSavings = formatter.format(itemSavings).replace('INR', '₹').trim();
-        
-        let savingsHtml = '';
-        if (itemSavings > 0) {
-            if (isLossFrame) {
-                savingsHtml = `<div class="item-loss-label">${savePct}% OFF | <span style="color: #c5221f;">DON'T LOSE ${formattedItemSavings}</span></div>`;
-            } else {
-                savingsHtml = `<div class="item-savings-label">${savePct}% OFF | <span style="color: #137333;">SAVE ${formattedItemSavings}</span></div>`;
-            }
-        }
-        
-        const cartItemHTML = `
-            <div class="cart-item">
-                <img src="${product.image}" alt="${product.title}">
-                <div class="cart-item-details">
-                    <div>
-                        <h4 class="cart-item-title">${product.title}</h4>
-                        <p class="cart-item-price">${product.price} <span style="text-decoration: line-through; font-size: 0.85em; color: #999;">${product.originalPrice}</span></p>
-                        ${savingsHtml}
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="qty-selector" style="width: auto;">
-                            <button class="qty-btn" onclick="changeCartQty('${item.id}', -1)">-</button>
-                            <input type="text" value="${item.qty}" readonly style="width: 40px; text-align: center; border: none;">
-                            <button class="qty-btn" onclick="changeCartQty('${item.id}', 1)">+</button>
-                        </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <button class="remove-btn" onclick="removeFromCart('${item.id}')">Remove</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        cartItemsContainer.innerHTML += cartItemHTML;
-    });
-    
-    // Format to INR
-    const formatter = new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-        maximumFractionDigits: 0
-    });
-    
-    const formattedSubtotal = formatter.format(subtotal).replace('INR', '₹').trim();
-    if(orderSubtotal) orderSubtotal.textContent = formattedSubtotal;
-    if(orderTotal) orderTotal.textContent = formattedSubtotal; // Assuming free shipping
-    
-    if(orderSavingsBanner) {
-        if(totalSavings > 0) {
-            const formattedTotalSavings = formatter.format(totalSavings).replace('INR', '₹').trim();
-            if (isLossFrame) {
-                orderSavingsBanner.textContent = `Buy now to avoid a loss of ${formattedTotalSavings}`;
-                orderSavingsBanner.className = 'loss-banner';
-            } else {
-                orderSavingsBanner.textContent = `Savings of ${formattedTotalSavings} applied to your order.`;
-                orderSavingsBanner.className = 'savings-banner';
-            }
-            orderSavingsBanner.style.display = 'block';
-        } else {
-            orderSavingsBanner.style.display = 'none';
-        }
-    }
-}
 
-function processCheckout(event) {
-    event.preventDefault();
-    const cart = getCart();
-    if (cart.length === 0) {
-        alert("Your cart is empty.");
-        return;
-    }
-    alert("Thank you for your order! Your luxury timepiece will be shipped soon.");
-    localStorage.removeItem('loss_cart');
-    window.location.href = 'index.html';
-}
 
 // --- Accordion Logic ---
 function toggleAccordion(btn) {
@@ -553,7 +455,12 @@ function loadProduct() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
     
-    if(!productId || !products[productId]) return;
+    if(!productId || !products[productId]) {
+        if(window.location.pathname.includes('product.html')) {
+            window.location.href = 'index.html';
+        }
+        return;
+    }
 
     const product = products[productId];
     
@@ -719,10 +626,10 @@ function loadRecommended(currentId) {
 
 // Initialize based on what exists on the page
 document.addEventListener('DOMContentLoaded', () => {
+    initSidecart();
     updateCartUI();
     initCarousel();
     loadProduct();
-    loadCheckout();
 
     // Make product cards on landing page clickable
     document.querySelectorAll('.product-card').forEach(card => {
@@ -738,3 +645,167 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+// --- SIDECART LOGIC ---
+function initSidecart() {
+    const sidecartHTML = `
+        <div class="sidecart-overlay" id="sidecartOverlay"></div>
+        <div class="sidecart" id="sidecart">
+            <div class="sidecart-header">
+                <h2>YOUR BAG</h2>
+                <div class="sidecart-header-actions">
+                    <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></button>
+                    <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+                    <button class="icon-btn close" id="closeSidecartBtn"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+                </div>
+            </div>
+            
+            <div class="sidecart-content-scroll">
+                <div class="sidecart-reservation-msg">
+                    <span class="info-icon">i</span> <div><strong>Your items aren't reserved,</strong> checkout quickly to make sure you don't miss out.</div>
+                </div>
+                
+                <div class="sidecart-items" id="sidecartItemsContainer">
+                    <!-- Cart items go here -->
+                </div>
+                
+                <div class="sidecart-footer">
+                    <div class="sidecart-summary">
+                        <h4>ORDER SUMMARY</h4>
+                        <div class="summary-row">
+                            <span>Sub Total</span>
+                            <span id="sidecartSubtotal">₹0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Estimated Shipping</span>
+                            <span>₹0</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <span id="sidecartTotal">₹0</span>
+                        </div>
+                    </div>
+                    
+                    <p id="sidecartSavingsBanner" style="display: none; color: #c5221f; text-align: center; font-weight: bold; margin-bottom: 1rem; font-size: 0.95rem;"></p>
+                    <button class="btn-solid btn-checkout" onclick="processCheckout(event)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 8h-1V6A6 6 0 0 0 6 6v2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+                        READY FOR CHECKOUT
+                    </button>
+                    <button onclick="saveCartForLater()" style="background: none; border: none; color: #333; text-decoration: underline; font-weight: 700; cursor: pointer; display: block; width: 100%; text-align: center; margin-top: 1rem; font-size: 0.85rem;">Save for later</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', sidecartHTML);
+    
+    document.getElementById('closeSidecartBtn').addEventListener('click', closeSidecart);
+    document.getElementById('sidecartOverlay').addEventListener('click', closeSidecart);
+
+    // Intercept cart button click
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+        cartBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSidecart();
+        });
+    }
+}
+
+function openSidecart() {
+    renderSidecart();
+    document.getElementById('sidecart').classList.add('active');
+    document.getElementById('sidecartOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeSidecart() {
+    document.getElementById('sidecart').classList.remove('active');
+    document.getElementById('sidecartOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function renderSidecart() {
+    const container = document.getElementById('sidecartItemsContainer');
+    if (!container) return;
+    
+    const cart = getCart();
+    container.innerHTML = '';
+    
+    let subtotal = 0;
+    let totalSavings = 0;
+    
+    if (cart.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding: 2rem 0; color: #666;">Your bag is empty.</p>';
+    } else {
+        cart.forEach(item => {
+            const p = products[item.id];
+            if (!p) return;
+            
+            const priceNum = parseInt(p.price.replace(/[^0-9]/g, ''));
+            const originalPriceNum = parseInt(p.originalPrice.replace(/[^0-9]/g, ''));
+            subtotal += priceNum * item.qty;
+            totalSavings += (originalPriceNum - priceNum) * item.qty;
+            
+            const savePct = Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100);
+            const discountAmount = originalPriceNum - priceNum;
+            const formatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+            const saveText = discountAmount > 0 ? `${savePct}% OFF | DON'T LOSE ${formatter.format(discountAmount).replace('INR', '₹').trim()}` : '';
+            
+            container.innerHTML += `
+                <div class="sidecart-item">
+                    <img src="${p.image}" alt="${p.title}">
+                    <div class="sidecart-item-details">
+                        ${saveText ? `<span class="sidecart-item-badge">${saveText}</span>` : ''}
+                        <h4 class="sidecart-item-title">${p.title}</h4>
+                        <p class="sidecart-item-variant">Standard / Premium</p>
+                        <div class="sidecart-item-price-row">
+                            <span class="sidecart-item-price">${p.price}</span>
+                            <span class="sidecart-item-original">${p.originalPrice}</span>
+                        </div>
+                        <div class="sidecart-item-controls">
+                            <div class="sidecart-qty">
+                                <button onclick="changeCartQty('${item.id}', -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button onclick="changeCartQty('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="sidecart-item-remove" onclick="removeFromCart('${item.id}')">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            `;
+        });
+    }
+    
+    const formatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+    const formattedSubtotal = formatter.format(subtotal).replace('INR', '₹').trim();
+    
+    document.getElementById('sidecartSubtotal').textContent = formattedSubtotal;
+    document.getElementById('sidecartTotal').textContent = formattedSubtotal;
+    
+    const savingsBanner = document.getElementById('sidecartSavingsBanner');
+    if (savingsBanner) {
+        if (totalSavings > 0) {
+            const formattedSavings = formatter.format(totalSavings).replace('INR', '₹').trim();
+            savingsBanner.innerHTML = `Don't lose your ${formattedSavings}`;
+            savingsBanner.style.display = 'block';
+        } else {
+            savingsBanner.style.display = 'none';
+        }
+    }
+    
+}
+
+function addToCartFromSidecart(id) {
+    let cart = getCart();
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ id: id, qty: 1 });
+    }
+    saveCart(cart);
+}

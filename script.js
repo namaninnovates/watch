@@ -401,10 +401,11 @@ function removeFromCart(id) {
     loadCheckout();
 }
 
-function saveForLater(id) {
-    // Basic implementation: just remove from cart and show alert
-    alert("Item saved for later!");
-    removeFromCart(id);
+function saveCartForLater() {
+    alert("Cart saved for later!");
+    localStorage.removeItem('cart');
+    updateCartUI();
+    loadCheckout();
 }
 
 function changeCartQty(id, step) {
@@ -487,7 +488,6 @@ function loadCheckout() {
                             <button class="qty-btn" onclick="changeCartQty('${item.id}', 1)">+</button>
                         </div>
                         <div style="display: flex; gap: 1rem;">
-                            <button class="remove-btn" onclick="saveForLater('${item.id}')">Save for later</button>
                             <button class="remove-btn" onclick="removeFromCart('${item.id}')">Remove</button>
                         </div>
                     </div>
